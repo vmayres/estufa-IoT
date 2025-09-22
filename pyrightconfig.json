@@ -1,0 +1,8 @@
+{
+  "include": ["."],
+  "extraPaths": [
+    "C:/Users/victo/AppData/Roaming/Python/Python313/site-packages",
+    "./typings"
+  ],
+  "typeCheckingMode": "basic"
+}
