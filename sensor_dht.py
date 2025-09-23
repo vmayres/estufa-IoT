@@ -18,7 +18,7 @@ class sensor_dht:
         
         self.last_time = 0
         self.temperatura = None
-        self.humidade = None
+        self.umidade = None
     
     # metodo para realizar um ciclo de medida do sensor
     def read_data(self):
@@ -26,12 +26,12 @@ class sensor_dht:
             self.last_time = time.time()
             self.sensor.measure()
             self.temperatura = self.sensor.temperature()
-            self.humidade = self.sensor.humidity()
+            self.umidade = self.sensor.humidity()
         return True
     
     # retorna a temperatura e a humidade
     def get_temperatura(self):
         return self.temperatura
     
-    def get_humidade(self):
-        return self.humidade
+    def get_umidade(self):
+        return self.umidade

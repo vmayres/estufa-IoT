@@ -1,4 +1,4 @@
-from machine import Pin, PWM
+from machine import PWM, Pin
 
 # 
 MAX_PWM = 1023
@@ -9,15 +9,16 @@ VELOCIDADE = 0
 class MotorDC:
     def __init__(self, pin, freq_motor=1000):
         self.motor = PWM(Pin(pin), freq=freq_motor)
-        self.duty = 0
+        self.set_speed(VELOCIDADE)
 
-    def get_duty(self):
-        return self.duty
+    def set_speed(self, porcentagem: int):
+        if porcentagem < 0: porcentagem = 0
+        if porcentagem > 100: porcentagem = 100
+        duty = int(MAX_PWM * (porcentagem / 100))
+        self.motor.duty(duty)
 
-    def set_duty(self, duty):
-        self.duty = duty
-        self.motor.duty(self.duty)
+    def get_speed(self):
+        duty = self.motor.duty()
+        percent = int((duty / MAX_PWM) * 100)
+        return percent
 
-        
-
-    
