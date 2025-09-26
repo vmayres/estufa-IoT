@@ -1,13 +1,10 @@
-import dht
-from machine import Pin
 import time
+import dht
+from machine import Pin  # MicroPython: ticks_ms(), ticks_diff(), sleep_ms()
 
-# tempo de intervalo entre leitura (para nao ter erro)
-DHT_INTERVAL_S = 2
+DHT_INTERVAL_S = 2  # 2 segundos para DHT11 e DHT22
 
 class sensor_dht:
-
-    # Construtor da classe (inicializa o DHT)
     def __init__(self, pin, dht_type='DHT11'):
         if dht_type == 'DHT11':
             self.sensor = dht.DHT11(Pin(pin))
@@ -15,23 +12,22 @@ class sensor_dht:
             self.sensor = dht.DHT22(Pin(pin))
         else:
             raise ValueError("Tipo de sensor DHT inválido. Use 'DHT11' ou 'DHT22'.")
-        
-        self.last_time = 0
+
+        self.last_time = time.time() - DHT_INTERVAL_S
         self.temperatura = None
         self.umidade = None
-    
-    # metodo para realizar um ciclo de medida do sensor
+
     def read_data(self):
-        if (time.time() - self.last_time) > DHT_INTERVAL_S:
-            self.last_time = time.time()
+        """Tenta atualizar os valores, mas só se já passou o cooldown de 2s"""
+        now = time.time()
+        if (now - self.last_time) >= DHT_INTERVAL_S:
+            self.last_time = now
             self.sensor.measure()
             self.temperatura = self.sensor.temperature()
             self.umidade = self.sensor.humidity()
-        return True
-    
-    # retorna a temperatura e a humidade
+
     def get_temperatura(self):
         return self.temperatura
-    
+
     def get_umidade(self):
         return self.umidade
